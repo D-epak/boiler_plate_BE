@@ -1,5 +1,7 @@
-import { auth } from "./auth"
+import { auth } from "./auth";
+import { Payment } from "./payment";
 
 export default{
-   auth
+   auth,
+   Payment
 }

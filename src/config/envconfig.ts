@@ -21,6 +21,11 @@ const envVarsSchema = z.object({
   SPOTIFY_REDIRECT_URL: z.string().url(),
   SPOTIFY_CLIENT_ID: z.string(),
   SPOTIFY_CLIENT_SECRET: z.string(),
+  RAZOR_WEBHOOK_SECRET:z.string(),
+  XCLIENT_ID:z.string(),
+  XCLIENT_SECRET:z.string(),
+  RAZORPAY_API_KEY:z.string(),
+  RAZOR_API_SECRET:z.string()
 });
 
 const envVars = envVarsSchema.parse(process.env);
@@ -43,5 +48,10 @@ export const envConfigs = {
   spotifyredirectUrl:envVars.SPOTIFY_REDIRECT_URL,
   spotifyClientId:envVars.SPOTIFY_CLIENT_ID,
   spotifyClientSecret:envVars.SPOTIFY_CLIENT_SECRET,
+  razorpaywebhookSecret :envVars.RAZOR_WEBHOOK_SECRET,
+  xclientId:envVars.XCLIENT_ID,
+  xclientSecret:envVars.XCLIENT_SECRET,
+  razorpayApiKey:envVars.RAZORPAY_API_KEY,
+  razorpayAptSecret:envVars.RAZOR_API_SECRET
 };
 

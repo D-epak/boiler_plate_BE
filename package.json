@@ -15,6 +15,7 @@
     "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
+    "cashfree-pg": "^4.3.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.36.0",
@@ -25,7 +26,9 @@
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "pg": "^8.13.1",
+    "razorpay": "^2.9.5",
     "twilio": "^5.3.5",
+    "uniqid": "^5.4.0",
     "winston": "^3.16.0",
     "zod": "^3.23.8"
   },

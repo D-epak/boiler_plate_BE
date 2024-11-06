@@ -1,26 +1,52 @@
-import { getUser } from "../config/token";
 import z,{ AnyZodObject, ZodError } from 'zod';
 import { Request, Response, NextFunction } from 'express';
+import passport from "passport";
 
 
 
-const authenticateUser=(req,res,next)=>{
-    try{
-      const getToken = req.headers.authorization;
-      if(!getToken){
-        throw new Error("Token not Found");
-      }
-      const user = getUser(getToken)
-      if(!user){
-        throw new Error("User not Found");
-      }
-      req.user=user
+const TokenHeaderSchema = z.object({
+  header:z.object({
+    authorization: z.string().regex(/^Bearer\s+[a-zA-Z0-9-_]+\.[a-zA-Z0-9-_]+\.[a-zA-Z0-9-_]+$/, {
+      message: "Invalid Authorization token format"
+  })
+  })
+});
+
+const validateRequestHeader = (schema: AnyZodObject) => async (req: Request, res: Response, next: NextFunction) => {
+  try {
+      const tokenHeader = req.headers['authorization']; 
+      await schema.parseAsync({ header:{ authorization: tokenHeader}});
+      req.header['authorization'] = tokenHeader;
       next();
-    }catch(err){
-      if(res)res.status(400).send({message:err})
-      return null;
-    }
-}
+  } catch (error) {
+      return res.status(400).send({ status: false, message: "Invalid Headers Authorization Token Missing." });
+  }
+};
+
+const verifyCallback = (req:Request, resolve:any, reject:any,res:Response) => async (err:any, user:any, info:any) => {
+  if (err || info || !user) {
+    return reject(new Error('UNAUTHOURIZED USER'));
+  }
+  req["user"] = user;
+  resolve();
+};
+
+export const authenticateUserJwt = () => async (req:Request, res:Response, next:NextFunction) => {
+  
+  return new Promise((resolve, reject) => {
+    passport.authenticate('jwt', { session: false }, verifyCallback(req, resolve, reject,res))(req, res, next);
+  })
+    .then(() =>{ next() })
+    .catch((err) => {
+      if(res)return res.status(401).send({status:false,message:"UNAUTHOURIZED USER"});
+      next(err)
+    });
+};
+
+export const authenticateUser = [
+  validateRequestHeader(TokenHeaderSchema),
+  authenticateUserJwt()
+]
 
 export const validateRequest =(schema: AnyZodObject) =>
     async (req: Request, res: Response, next: NextFunction) => {
