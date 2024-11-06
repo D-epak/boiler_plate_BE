@@ -9,7 +9,7 @@ import { envConfigs } from "../config/envconfig"; // Importing environment confi
 export class Payment {
 
   // Method to handle Razorpay payment
-  static payment = async (req: Request, res: Response) => {
+  static razorpayment = async (req: Request, res: Response) => {
     try {
       const userId = req["user"]["userId"];  // Extract user ID from the token
       const amount = req.body.amount;  // Get the amount from the request body
