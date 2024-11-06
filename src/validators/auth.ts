@@ -45,4 +45,12 @@ export class auth{
         }).strict(),
         query: z.object({}).strict(),
       }).strict();
+
+      static spotifyLogin = z.object({
+        body: z.object({
+          code: z.string({required_error: "code is required"})
+        }).strict(),
+        params: z.object({}).strict(),
+        query: z.object({}).strict({message:"query is not required"}),
+      }).strict();
 }

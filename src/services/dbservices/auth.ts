@@ -87,7 +87,7 @@ export class auth{
             email: users.email,
             phone: users.phone
           }).from(users).where(eq(users.email, details.email))
-          return findUser;
+          return findUser[0].userId;
         } catch (error) {
           throw new Error(error.message)
         }

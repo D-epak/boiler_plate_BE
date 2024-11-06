@@ -17,7 +17,10 @@ const envVarsSchema = z.object({
   TWILIO_authToken: z.string(),
   META_PHONE_ID:z.string(),
   META_ACCESS_TOKEN: z.string(),
-  MAIL_API_KEY:z.string()
+  MAIL_API_KEY:z.string(),
+  SPOTIFY_REDIRECT_URL: z.string().url(),
+  SPOTIFY_CLIENT_ID: z.string(),
+  SPOTIFY_CLIENT_SECRET: z.string(),
 });
 
 const envVars = envVarsSchema.parse(process.env);
@@ -36,6 +39,9 @@ export const envConfigs = {
   twilioauthToken: envVars.TWILIO_authToken,
   metaPhoneId: envVars.META_PHONE_ID,
   metaAccessToken: envVars.META_ACCESS_TOKEN,
-  mailApiKey:envVars.MAIL_API_KEY
+  mailApiKey:envVars.MAIL_API_KEY,
+  spotifyredirectUrl:envVars.SPOTIFY_REDIRECT_URL,
+  spotifyClientId:envVars.SPOTIFY_CLIENT_ID,
+  spotifyClientSecret:envVars.SPOTIFY_CLIENT_SECRET,
 };
 

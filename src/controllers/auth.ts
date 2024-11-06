@@ -8,6 +8,7 @@ import Twillio from "../services/twilio";
 import { OtpVerificationMethods } from "../enums";
 import { generateAuthTokens } from "../config/token";
 import { otpToken } from "../helper/common";
+import jwt from 'jsonwebtoken'
 
 
 export class auth{
@@ -120,6 +121,69 @@ export class auth{
           });
         } catch (error) {
           return res.status(500).send({status:false,message:error.message});
+        }
+      }
+
+      static spotifyOauthHandler = async (req: Request, res: Response) => {
+        try{
+          const code = req.body.code;
+          const urlSearchParams = new URLSearchParams();
+          urlSearchParams.append("grant_type",'authorization_code');
+          urlSearchParams.append("code",code as string);
+          urlSearchParams.append("redirect_uri",envConfigs.spotifyredirectUrl);
+    
+          const getaccesstokenurl = 'https://accounts.spotify.com/api/token'
+          const accessTokenResponse = await fetch(getaccesstokenurl,{
+            method: "POST",
+            headers:{
+              'content-type': 'application/x-www-form-urlencoded',
+              'Authorization': 'Basic ' + (Buffer.from(envConfigs.spotifyClientId + ':' + envConfigs.spotifyClientSecret).toString('base64'))
+            },
+            body:urlSearchParams.toString()
+          });
+    
+          if(!accessTokenResponse.ok) throw new Error(`error while getting access token`)
+    
+          const {access_token} = await accessTokenResponse.json();
+    
+          if(!access_token) throw new Error("invalid access token");
+    
+          const profileResponse = await fetch('https://api.spotify.com/v1/me', {
+            method:"GET",
+            headers: {
+              Authorization: 'Bearer ' + access_token
+            }
+          });
+    
+          if(!profileResponse.ok) throw new Error(`error while getting user profile`);
+    
+          const profileData = await profileResponse.json();
+    
+          const {email,display_name} = profileData;
+    
+        if(!email) throw new Error("error while getting user email");
+    
+        let userExists = await dbservices.auth.getUserbyEmail(email);
+        let message = "User Logged In";
+        let newUser = false;
+        if (!userExists) {
+          const createBody = {
+            email: email,
+            name: display_name,
+          };
+          userExists = await dbservices.auth.createNewUser(createBody);
+          message = "User Signed Up";
+          newUser = true;
+        }
+        const token = generateAuthTokens(userExists);
+        return res.status(200).send({
+          status: true,
+          message,
+          token: token,
+        });
+        }
+        catch(error){
+          return res.status(500).send({ status: false, message: error.message });
         }
       }
 }
