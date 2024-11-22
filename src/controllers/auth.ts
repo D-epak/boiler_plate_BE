@@ -9,6 +9,8 @@ import { OtpVerificationMethods } from "../enums";
 import { generateAuthTokens } from "../config/token";
 import { otpToken } from "../helper/common";
 import jwt from 'jsonwebtoken'
+import crypto from 'crypto';
+
 
 
 export class auth{

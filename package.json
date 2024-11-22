@@ -7,7 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "start": "node  ./dist/src/app.js",
-    "dev": "nodemon --exec npx ts-node src/app.ts "
+    "dev": "nodemon --exec npx ts-node src/app.ts ",
+    "migration:generate": "drizzle-kit generate",
+    "migration:push": "node -r esbuild-register src/config/migrate.ts",
+    "migration:drop": "drizzle-kit drop"
   },
   "author": "",
   "license": "ISC",
@@ -17,8 +20,10 @@
     "bcryptjs": "^2.4.3",
     "cashfree-pg": "^4.3.0",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "dotenv": "^16.4.5",
-    "drizzle-orm": "^0.36.0",
+    "drizzle-kit": "^0.28.1",
+    "drizzle-orm": "^0.36.3",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "moment": "^2.30.1",
