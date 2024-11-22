@@ -6,6 +6,15 @@ import { Say } from "twilio/lib/twiml/VoiceResponse";
 
 export class User {
 
+
+  static testRoute:any = async(req:Request,res:Response)=>{
+    try{
+      return res.status(200).send({message:"Api is Running...",status:true})
+    }catch(error){
+      return res.status(500).send({message:"Api Giving Error",status:false})
+    }
+  }
+
   static saveDetails:any = async(req:Request,res:Response)=>{
     try{
       let {appId,deviceId,userId} = req.body
