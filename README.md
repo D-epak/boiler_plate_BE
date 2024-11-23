@@ -80,6 +80,7 @@ Inserts the eventId, userId, name, type, and eventDetails into the eventData tab
   2. For local development, configure the database connection in the .env file.
   3. if you want to run user route http://localhost:port/user/endPoints
   4. if you want to run auth route http://localhost:port/auth/endPoints
+  5. After 200 miniuts token will be expire.
 
 
 

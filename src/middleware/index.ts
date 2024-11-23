@@ -24,8 +24,8 @@ const validateRequestHeader = (schema: AnyZodObject) => async (req: Request, res
 };
 
 const verifyCallback = (req:Request, resolve:any, reject:any,res:Response) => async (err:any, user:any, info:any) => {
-  console.log("Userrrrr...............",user);
-  console.log(info);
+  // console.log("Userrrrr...............",user);
+  // console.log(info);
   if (err || info || !user) {
     return reject(new Error('UNAUTHOURIZED USER'));
   }

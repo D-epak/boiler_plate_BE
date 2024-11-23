@@ -18,14 +18,12 @@ export class User {
 
   static saveDetails:any = async(req:Request,res:Response)=>{
     try{
-      console.log("varun")
+      // console.log("varun")
       let {appId,deviceId,userId} = req.body
       if(!userId) userId = this.generateId()
       const data = await dbservices.User.saveDetails(userId,appId,deviceId)
       if(!data) throw new Error("Error In inserting Data")
-      // console.log(data[0].userId)
       const token = await generateAuthTokens({userId:data[0].userId})  
-      console.log("token:",token)
       return res.status(200).send({message:"Details Save",data:data,token})
     }catch(error:any){
       // console.log("Error::",error)

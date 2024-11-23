@@ -1,9 +1,9 @@
 export enum OtpVerificationMethods{
-    WHATSAPP = "whatsapp",
-    EMAIL = "email"
-  }
+  WHATSAPP = "whatsapp",
+  EMAIL = "email"
+}
 
-  export enum TokenTypes {
-    ACCESS = 'access',
-    REFRESH = 'refresh',
-  }
+export enum TokenTypes {
+  ACCESS = 'access',
+  REFRESH = 'refresh',
+}

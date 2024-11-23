@@ -1,16 +1,12 @@
 import express from "express";
 const router = express.Router();
 import user from "./user"
-import auth from './auth'
 
 const defaultRoutes = [
   {
     path: "/user",
     route: user,
-  },{
-    path: "/auth",
-    route: auth,
-  }
+  },
 ];
 
 defaultRoutes.forEach((route) => {
