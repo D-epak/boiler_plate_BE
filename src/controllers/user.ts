@@ -3,9 +3,10 @@ import dbservices from "../services/dbservices";
 import uniqid from 'uniqid';
 import crypto from "crypto";
 import { Say } from "twilio/lib/twiml/VoiceResponse";
+import { generateAuthTokens } from "../config/token";
 
 export class User {
-
+  static generateId = () => Math.random().toString(36).substr(2, 8).toUpperCase();
 
   static testRoute:any = async(req:Request,res:Response)=>{
     try{
@@ -17,11 +18,15 @@ export class User {
 
   static saveDetails:any = async(req:Request,res:Response)=>{
     try{
+      console.log("varun")
       let {appId,deviceId,userId} = req.body
-      if(!userId) userId = `user${Math.random().toString(36).substring(2, 5)}`
+      if(!userId) userId = this.generateId()
       const data = await dbservices.User.saveDetails(userId,appId,deviceId)
       if(!data) throw new Error("Error In inserting Data")
-      return res.status(200).send({message:"Details Save",data:data})
+      // console.log(data[0].userId)
+      const token = await generateAuthTokens({userId:data[0].userId})  
+      console.log("token:",token)
+      return res.status(200).send({message:"Details Save",data:data,token})
     }catch(error:any){
       // console.log("Error::",error)
       return res.status(500).json({ status: false, message: error});
@@ -30,15 +35,14 @@ export class User {
 
   static eventDetails:any = async(req:Request,res:Response)=>{
     try{
-      const eventId = `event${Math.random().toString(36).substring(2, 5)}`
+      const userId = req["user"]["userId"];  
+      const eventId = this.generateId()
       const eventDetails = req.body
-      // console.log(eventDetails)
-      const data = await dbservices.User.eventDetails(eventId,eventDetails)
-      // console.log("Data",data)
+      const data = await dbservices.User.eventDetails(userId,eventId,eventDetails)
       if(!data) throw new Error("Error In inserting Data")
       return res.status(200).json({message:"save Events Successfully"})
     }catch(error:any){
-      console.log(error);
+      // console.log(error);
      return res.status(500).json({ status: false, message: error.mesage });
     }
   }

@@ -1,7 +1,7 @@
-import z,{ AnyZodObject, ZodError } from 'zod';
-import { Request, Response, NextFunction } from 'express';
-import passport from "passport";
-
+import { Request, Response, NextFunction } from "express";
+import { AnyZodObject, z, ZodError } from "zod";
+// import { getUser } from "../config/jwt";
+import passport from 'passport';
 
 
 const TokenHeaderSchema = z.object({
@@ -24,6 +24,8 @@ const validateRequestHeader = (schema: AnyZodObject) => async (req: Request, res
 };
 
 const verifyCallback = (req:Request, resolve:any, reject:any,res:Response) => async (err:any, user:any, info:any) => {
+  console.log("Userrrrr...............",user);
+  console.log(info);
   if (err || info || !user) {
     return reject(new Error('UNAUTHOURIZED USER'));
   }
@@ -31,7 +33,7 @@ const verifyCallback = (req:Request, resolve:any, reject:any,res:Response) => as
   resolve();
 };
 
-export const authenticateUserJwt = () => async (req:Request, res:Response, next:NextFunction) => {
+export const authenticateUserJwt = () => async (req:any, res:any, next:NextFunction) => {
   
   return new Promise((resolve, reject) => {
     passport.authenticate('jwt', { session: false }, verifyCallback(req, resolve, reject,res))(req, res, next);
@@ -48,31 +50,27 @@ export const authenticateUser = [
   authenticateUserJwt()
 ]
 
-export const validateRequest =(schema: AnyZodObject) =>
-    async (req: Request, res: Response, next: NextFunction) => {
+export const validateRequest =
+  (schema: AnyZodObject) =>
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
-    const sanitizedValues = await schema.parseAsync({
-    body: req.body,
-    query: req.query,
-    params: req.params,
-    });
-    req.body = sanitizedValues.body;
-    req.query = sanitizedValues.query;
-    req.params = sanitizedValues.params;
-    return next();
+      const sanitizedValues = await schema.parseAsync({
+        body: req.body,
+        query: req.query,
+        params: req.params,
+      });
+      req.body = sanitizedValues.body;
+      req.query = sanitizedValues.query;
+      req.params = sanitizedValues.params;
+      return next();
     } catch (error) {
-    const validationErrors: { [key: string]: string } = {};
+      const validationErrors: { [key: string]: string } = {};
 
-    (error as ZodError).errors.forEach((errorMessage) => {
+      (error as ZodError).errors.forEach((errorMessage) => {
         const fieldName = errorMessage.path.join(".");
         validationErrors[fieldName] = errorMessage.message;
-    });
+      });
 
-    res.status(400).json({ errors: validationErrors });
+      res.status(400).json({ errors: validationErrors });
     }
-    };
-
-    
-
-
-export default authenticateUser
+  };

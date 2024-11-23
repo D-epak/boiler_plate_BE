@@ -1,5 +1,5 @@
 {
-  "id": "b9bc59ed-72bf-49e2-aab9-c72073597e15",
+  "id": "a10e79e6-3557-4387-b580-89a3130e2044",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -62,15 +62,7 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {
-        "eventData_type_unique": {
-          "name": "eventData_type_unique",
-          "nullsNotDistinct": false,
-          "columns": [
-            "type"
-          ]
-        }
-      },
+      "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

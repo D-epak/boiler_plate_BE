@@ -9,9 +9,9 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-passport.use('jwt', jwtStrategy);
 
 app.use(cors({ origin: "*"}));
+passport.use('jwt', jwtStrategy);
 
 app.use("/", router);
 

@@ -5,7 +5,7 @@ import auth from './auth'
 
 const defaultRoutes = [
   {
-    path: "/",
+    path: "/user",
     route: user,
   },{
     path: "/auth",

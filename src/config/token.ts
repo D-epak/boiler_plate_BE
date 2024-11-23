@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { envConfigs } from './envconfig';
 import { TokenTypes } from '../enums';
 
-export const generateAuthTokens = (payload: { userId:number }) => {
+export const generateAuthTokens = (payload: { userId:any }) => {
   const accessTokenExpires = moment().add(
     envConfigs.accessExpirationMinutes,
     "minutes"
@@ -14,7 +14,6 @@ export const generateAuthTokens = (payload: { userId:number }) => {
     type: TokenTypes.ACCESS, // Include the token type
     exp: accessTokenExpires.unix() // Set expiration time in UNIX timestamp format
   }), envConfigs.jwtsecret);
-
   return accessToken;
 }
 
@@ -25,10 +24,10 @@ const jwtOptions = {
 
 const jwtVerify = async (payload, done) => {
   try {
+    console.log(payload ,"payloadddd")
     if (payload.type !== TokenTypes.ACCESS) {
       throw new Error('Invalid token type');
     }
-    if(!payload && Object.keys(payload).length <=3 && (!payload.userId && typeof parseInt(payload.userId) !== "number") && (!payload.userName && typeof payload.userName !== "string") && !payload.isOnboarded ) throw new Error("Invalid Token"); 
     done(null, payload);
   } catch (error) {
     done(error, false);

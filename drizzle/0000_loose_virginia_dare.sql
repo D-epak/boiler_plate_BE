@@ -4,8 +4,7 @@ CREATE TABLE IF NOT EXISTS "eventData" (
 	"eventId" varchar,
 	"name" varchar,
 	"type" varchar,
-	"event_details" varchar,
-	CONSTRAINT "eventData_type_unique" UNIQUE("type")
+	"event_details" varchar
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "usersss" (

@@ -1,26 +1,28 @@
 import {and, desc, eq, inArray, sql} from "drizzle-orm";
 import postgreDb from "../../config/db";
 import { eventData, userss } from "../../models/schema";
+import { generateAuthTokens } from "../../config/token";
 
 export class User {
 
   static saveDetails:any = async(userId:any,appId:any,deviceId:any):Promise<any>=>{
     try{
-        return await postgreDb.insert(userss).values({
+        const result =  await postgreDb.insert(userss).values({
             userId:userId,
             appId:appId,
             deviceId:deviceId
-        }).returning({users:userss.userId})
+        }).returning({userId:userss.userId})
+        return result
     }catch(error:any){
         throw new Error(error)
     }
   }
 
-  static eventDetails = async(eventId:any,data:any):Promise<any>=>{
+  static eventDetails = async(userId:any,eventId:any,data:any):Promise<any>=>{
     try{
       //  console.log(userId,eventId,data, data.name, data.type)
         const result =  await postgreDb.insert(eventData).values({
-            userId:data.userId,
+            userId:userId,
             eventId:eventId,
             name:data.name,
             type:data.type,

@@ -14,7 +14,7 @@ export const userss: any = pgTable("usersss", {
     userId: varchar("user_id").references(() => userss.userId),
     eventId: varchar("eventId"),
     name: varchar("name"),
-    type: varchar("type").unique(),
+    type: varchar("type"),
     eventDetails: varchar("event_details"),
   })
 
